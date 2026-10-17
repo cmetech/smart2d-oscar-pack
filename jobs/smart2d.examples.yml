@@ -1,5 +1,5 @@
 - name: smart2d_demo:hello
-  status: disabled
+  status: enabled
   type: invoke
   owner: Smart2D pack
   organization: Smart2D
@@ -10,7 +10,7 @@
     summary: Run a local Invoke task
     category: Smart2D examples
     tags: [smart2d, invoke]
-    prerequisites: [Enable this job when ready to try it.]
+    prerequisites: []
     inputs: []
     output: A greeting in the task result.
     example: 'smart2d_demo:hello'

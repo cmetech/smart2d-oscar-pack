@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "pack-tools"))
 
 def test_pack_declares_external_table_and_workflow():
     source = yaml.safe_load((ROOT / "pack.source.yml").read_text())
-    assert (source["schema_version"], source["id"], source["version"]) == (7, "smart2d", "1.1.0")
+    assert (source["schema_version"], source["id"], source["version"]) == (7, "smart2d", "1.1.1")
     from project_pack.tables import parse_create_table
 
     path = ROOT / "tables/ext_oracle_audit_counts.sql"
@@ -75,7 +75,11 @@ def test_scaffold_has_one_safe_example_for_each_installable_artifact_family():
     assert all((ROOT / path).is_file() for path in expected)
     jobs = yaml.safe_load((ROOT / expected[0]).read_text())
     assert {job['type'] for job in jobs} == {'invoke', 'fabric', 'script', 'ansible'}
-    assert all(job['status'] == 'disabled' and 'schedule' not in job for job in jobs)
+    assert {job['name'] for job in jobs if job['status'] == 'enabled'} == {'smart2d_demo:hello'}
+    assert all('schedule' not in job for job in jobs)
+    assert all(job['status'] == 'disabled' for job in jobs if job['name'] != 'smart2d_demo:hello')
+    hook = json.loads((ROOT / 'conf/hooks/smart2d-demo.json').read_text())[0]
+    assert hook['target_name'] == 'smart2d_demo:hello' and hook['enabled'] is False
     assert yaml.safe_load((ROOT / 'conf/triggers/smart2d.demo.yml').read_text())['enabled'] is False
     for family in ('hooks', 'probes'):
         assert json.loads((ROOT / f'conf/{family}/smart2d-demo.json').read_text())[0]['enabled' if family == 'hooks' else 'status'] in (False, 'disabled')
