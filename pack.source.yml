@@ -1,0 +1,7 @@
+schema_version: 7
+id: smart2d
+version: 1.0.0
+requires_oscar: '>=26.4.2,<27.0.0'
+requires_tasks:
+  common: []
+  local: []

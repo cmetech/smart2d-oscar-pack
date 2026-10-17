@@ -1,0 +1,15 @@
+{
+  "labels": {
+    "alertname": "OracleAuditEvent",
+    "severity": "warning",
+    "dbusername": {{ (row.dbusername or '')|tojson }},
+    "action_name": {{ (row.action_name or '')|tojson }},
+    "instance": {{ (row.instance or '')|tojson }}
+  },
+  "annotations": {
+    "summary": {{ ('Oracle audit event: ' ~ (row.action_name or 'unknown'))|tojson }},
+    "object": {{ ((row.object_schema or '') ~ '.' ~ (row.object_name or ''))|tojson }}
+  },
+  "startsAt": {{ starts_at|tojson }},
+  "generatorURL": {{ generator_url|tojson }}
+}
