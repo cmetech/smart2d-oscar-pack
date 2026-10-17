@@ -1,6 +1,6 @@
 # Smart2D OSCAR pack
 
-This private customer pack is maintained independently of OSCAR. Version 1.1.1
+This private customer pack is maintained independently of OSCAR. Version 1.1.2
 contains the Airflow 3 `smart2d.oracle_audit_processing_prod` DAG, its alert
 template, the pack-owned `external.ext_oracle_audit_counts` table, and a small
 working scaffold for each supported pack artifact family. It uses
@@ -22,12 +22,15 @@ are never included in the pack or its GitHub release.
    Omit `--insecure` when Middleware has a trusted TLS certificate. The key needs
    `read:workflows`. Local instances with API-key validation disabled may omit
    `--api-key-file`.
-3. Run `./pack-tools/build-pack.sh --output dist --expected-version 1.1.1`.
-   Drag `dist/smart2d-1.1.1.tar.gz` onto Management > Packs and install it.
+3. Run `./pack-tools/build-pack.sh --output dist --expected-version 1.1.2`.
+   Drag `dist/smart2d-1.1.2.tar.gz` onto Management > Packs and install it.
    The table appears in Settings > Application > External Tables as pack-owned.
    The DAG appears paused in Airflow within about five minutes.
 4. Configure the source Oracle Connection `oracle_db_oscar`, then check the
    Pushgateway and Alertmanager Connections before unpausing the DAG.
+5. After updating pack task code that a worker has already run, restart the
+   Taskmanager tasks worker. It caches imported Python modules until restart;
+   no image rebuild is needed for a pack-only update.
 
 Releases are built and attached to `v*` GitHub tags by
 `.github/workflows/release-pack.yml`; download the archive and its `.sha256`

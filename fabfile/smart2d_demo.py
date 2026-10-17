@@ -4,5 +4,5 @@ from fabric import task
 
 
 @task
-def inspect(c):
+def inspect(c, **_kwargs):
     return {"message": "Smart2D Fabric example ran"}

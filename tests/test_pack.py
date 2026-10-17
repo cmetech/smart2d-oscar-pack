@@ -1,9 +1,11 @@
 """Customer pack contract: installable table, isolated DAG, and no bundled credentials."""
 
 import ast
+import importlib.util
 import json
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 
 import yaml
 from jinja2 import Environment, FileSystemLoader
@@ -14,7 +16,7 @@ sys.path.insert(0, str(ROOT / "pack-tools"))
 
 def test_pack_declares_external_table_and_workflow():
     source = yaml.safe_load((ROOT / "pack.source.yml").read_text())
-    assert (source["schema_version"], source["id"], source["version"]) == (7, "smart2d", "1.1.1")
+    assert (source["schema_version"], source["id"], source["version"]) == (7, "smart2d", "1.1.2")
     from project_pack.tables import parse_create_table
 
     path = ROOT / "tables/ext_oracle_audit_counts.sql"
@@ -83,3 +85,16 @@ def test_scaffold_has_one_safe_example_for_each_installable_artifact_family():
     assert yaml.safe_load((ROOT / 'conf/triggers/smart2d.demo.yml').read_text())['enabled'] is False
     for family in ('hooks', 'probes'):
         assert json.loads((ROOT / f'conf/{family}/smart2d-demo.json').read_text())[0]['enabled' if family == 'hooks' else 'status'] in (False, 'disabled')
+
+
+def test_local_demo_tasks_accept_oscar_execution_metadata(monkeypatch):
+    for framework, path, function, expected in (
+        ('invoke', 'tasks/smart2d_demo.py', 'hello', {'message': 'Hello, OSCAR!'}),
+        ('fabric', 'fabfile/smart2d_demo.py', 'inspect', {'message': 'Smart2D Fabric example ran'}),
+    ):
+        monkeypatch.setitem(sys.modules, framework, SimpleNamespace(task=lambda body: body))
+        spec = importlib.util.spec_from_file_location(f'smart2d_{framework}_demo', ROOT / path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        result = getattr(module, function)(object(), **{'__task_id__': 'task-1', 'env:ANSIBLE_PASSWORD': 'ignored'})
+        assert result == expected
