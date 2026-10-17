@@ -1,0 +1,5 @@
+groups:
+  - name: smart2d-pack-demo
+    rules:
+      - record: smart2d_pack_example
+        expr: vector(0)

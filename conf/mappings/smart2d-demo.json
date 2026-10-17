@@ -1,0 +1,8 @@
+[
+  {
+    "name": "smart2d_demo_mapping",
+    "mapping_namespace_name": "smart2d_demo",
+    "description": "Lookup example for pack authors",
+    "element": [{"key": "hello", "value": "world"}]
+  }
+]

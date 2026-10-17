@@ -1,0 +1,15 @@
+[
+  {
+    "name": "smart2d.demo.maintenance",
+    "description": "Example maintenance window scoped to synthetic Smart2D events",
+    "suppression_type": "calendar",
+    "start_hour": 2,
+    "start_minute": 0,
+    "end_hour": 3,
+    "end_minute": 0,
+    "timezone": "UTC",
+    "is_recurring": true,
+    "days_of_week": "1,2,3,4,5",
+    "components": ["smart2d_scaffold_only"]
+  }
+]

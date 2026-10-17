@@ -1,0 +1,4 @@
+---
+- name: Show local role example
+  ansible.builtin.debug:
+    msg: Smart2D local role ran

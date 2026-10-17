@@ -1,0 +1,61 @@
+- name: smart2d_demo:hello
+  status: disabled
+  type: invoke
+  owner: Smart2D pack
+  organization: Smart2D
+  description: Return a greeting without external side effects.
+  kwargs:
+    name: OSCAR
+  catalog:
+    summary: Run a local Invoke task
+    category: Smart2D examples
+    tags: [smart2d, invoke]
+    prerequisites: [Enable this job when ready to try it.]
+    inputs: []
+    output: A greeting in the task result.
+    example: 'smart2d_demo:hello'
+- name: smart2d_demo:inspect
+  status: disabled
+  type: fabric
+  owner: Smart2D pack
+  organization: Smart2D
+  description: Return a local receipt without running a remote command.
+  catalog:
+    summary: Run a Fabric task
+    category: Smart2D examples
+    tags: [smart2d, fabric]
+    prerequisites: [Configure an authorized target and Fabric credentials before enabling.]
+    inputs: []
+    output: A local receipt in the task result.
+    example: 'smart2d_demo:inspect'
+- name: smart2d:smart2d_demo
+  status: disabled
+  type: script
+  owner: Smart2D pack
+  organization: Smart2D
+  description: Print a harmless message using the packaged Python script.
+  catalog:
+    summary: Run a Python script
+    category: Smart2D examples
+    tags: [smart2d, script]
+    prerequisites: [Enable this job when ready to try it.]
+    inputs: []
+    output: A message in the script log.
+    example: 'smart2d:smart2d_demo'
+- name: smart2d_demo:playbook
+  status: disabled
+  type: ansible
+  owner: Smart2D pack
+  organization: Smart2D
+  description: Run a read-only local Ansible playbook.
+  kwargs:
+    playbook_name: smart2d:smart2d_demo
+    targethosts: localhost
+  catalog:
+    summary: Run a local Ansible playbook
+    category: Smart2D examples
+    tags: [smart2d, ansible]
+    prerequisites: [Enable this job when ready to try it.]
+    inputs: []
+    output: A debug message in the task log.
+    example: 'smart2d_demo:playbook'

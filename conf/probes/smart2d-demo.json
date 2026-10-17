@@ -1,0 +1,9 @@
+[
+  {
+    "name": "smart2d.demo.http",
+    "type": "httpurl",
+    "target": "https://example.com/",
+    "description": "Disabled HTTP probe example",
+    "status": "disabled"
+  }
+]

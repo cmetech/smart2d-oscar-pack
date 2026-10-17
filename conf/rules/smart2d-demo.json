@@ -1,0 +1,9 @@
+[
+  {
+    "name": "smart2d_demo_rule",
+    "description": "Only labels synthetic Smart2D scaffold events",
+    "namespace": "smart2d_demo",
+    "condition": "namespace == \"smart2d_demo\"",
+    "actions": {"add_labels": {"smart2d_pack_example": "true"}}
+  }
+]

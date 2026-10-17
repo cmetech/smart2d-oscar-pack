@@ -1,0 +1,35 @@
+version: 1
+functions:
+  - name: smart2d_demo:hello
+    type: invoke
+    description: Return a local greeting.
+    catalog:
+      summary: Smart2D Invoke example
+      tags: [smart2d, invoke]
+      inputs: []
+      output: A greeting in the task result.
+  - name: smart2d_demo:inspect
+    type: fabric
+    description: Return a local receipt without a remote command.
+    catalog:
+      summary: Smart2D Fabric example
+      tags: [smart2d, fabric]
+      prerequisites: [Configure a target and credentials before running.]
+      inputs: []
+      output: A receipt in the task result.
+  - name: smart2d:smart2d_demo
+    type: script
+    description: Print a harmless message.
+    catalog:
+      summary: Smart2D Python script example
+      tags: [smart2d, script]
+      inputs: []
+      output: A message in the script log.
+  - name: smart2d:smart2d_demo
+    type: ansible
+    description: Run a local read-only playbook.
+    catalog:
+      summary: Smart2D Ansible example
+      tags: [smart2d, ansible]
+      inputs: []
+      output: A debug message in the task log.

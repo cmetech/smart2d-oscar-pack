@@ -1,0 +1,15 @@
+[
+  {
+    "name": "smart2d.demo.ticket.after",
+    "metric_slug": "smart2d_demo_ticket_after",
+    "description": "Disabled example invoking a local task after ticket creation",
+    "enabled": false,
+    "lifecycle_point": "ticket.after",
+    "target_type": "task",
+    "target_name": "smart2d_demo:hello",
+    "execution_mode": "fire_and_forget",
+    "timeout_seconds": 10,
+    "max_attempts": 1,
+    "retry_backoff_seconds": 5
+  }
+]

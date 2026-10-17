@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "pack-tools"))
 
 def test_pack_declares_external_table_and_workflow():
     source = yaml.safe_load((ROOT / "pack.source.yml").read_text())
-    assert (source["schema_version"], source["id"], source["version"]) == (7, "smart2d", "1.0.0")
+    assert (source["schema_version"], source["id"], source["version"]) == (7, "smart2d", "1.1.0")
     from project_pack.tables import parse_create_table
 
     path = ROOT / "tables/ext_oracle_audit_counts.sql"
@@ -53,3 +53,29 @@ def test_bundled_alert_template_renders_customer_values_as_json():
     assert payload['labels']['dbusername'] == 'O"Reilly'
     assert payload['labels']['action_name'] == 'logon\\failed'
     assert payload['annotations']['object'] == 'AUDIT.T'
+
+
+def test_scaffold_has_one_safe_example_for_each_installable_artifact_family():
+    expected = (
+        'jobs/smart2d.examples.yml', 'tasks/smart2d_demo.py',
+        'fabfile/smart2d_demo.py', 'scripts/smart2d_demo.py',
+        'ansible/playbooks/smart2d_demo.yml',
+        'ansible/roles/smart2d_demo/tasks/main.yml',
+        'ansible/library/smart2d_demo_receipt.py',
+        'ansible/collections/ansible_collections/smart2d/demo/galaxy.yml',
+        'ansible/collections/ansible_collections/smart2d/demo/roles/hello/tasks/main.yml',
+        'rules/smart2d-demo.yml',
+        'templates/smart2d_demo.j2', 'templates/smart2d_demo.yml',
+        'conf/rules/smart2d-demo.json', 'conf/mappings/smart2d-demo.json',
+        'conf/roles/smart2d-demo.json', 'conf/dashboards/smart2d-demo.json',
+        'conf/hooks/smart2d-demo.json', 'conf/suppressions/smart2d-demo.json',
+        'conf/probes/smart2d-demo.json', 'conf/triggers/smart2d.demo.yml',
+        'triggers/smart2d_demo.py', 'catalog/functions.yml',
+    )
+    assert all((ROOT / path).is_file() for path in expected)
+    jobs = yaml.safe_load((ROOT / expected[0]).read_text())
+    assert {job['type'] for job in jobs} == {'invoke', 'fabric', 'script', 'ansible'}
+    assert all(job['status'] == 'disabled' and 'schedule' not in job for job in jobs)
+    assert yaml.safe_load((ROOT / 'conf/triggers/smart2d.demo.yml').read_text())['enabled'] is False
+    for family in ('hooks', 'probes'):
+        assert json.loads((ROOT / f'conf/{family}/smart2d-demo.json').read_text())[0]['enabled' if family == 'hooks' else 'status'] in (False, 'disabled')

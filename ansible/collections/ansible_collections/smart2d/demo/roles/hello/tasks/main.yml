@@ -1,0 +1,4 @@
+---
+- name: Show collection role example
+  ansible.builtin.debug:
+    msg: Smart2D collection role ran

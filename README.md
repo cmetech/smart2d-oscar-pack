@@ -1,8 +1,9 @@
 # Smart2D OSCAR pack
 
-This private customer pack is maintained independently of OSCAR. Version 1.0.0
+This private customer pack is maintained independently of OSCAR. Version 1.1.0
 contains the Airflow 3 `smart2d.oracle_audit_processing_prod` DAG, its alert
-template, and the pack-owned `external.ext_oracle_audit_counts` table. It uses
+template, the pack-owned `external.ext_oracle_audit_counts` table, and a small
+working scaffold for each supported pack artifact family. It uses
 the shared `external` MySQL Connection from OSCAR Connections/Vault. Credentials
 are never included in the pack or its GitHub release.
 
@@ -21,8 +22,8 @@ are never included in the pack or its GitHub release.
    Omit `--insecure` when Middleware has a trusted TLS certificate. The key needs
    `read:workflows`. Local instances with API-key validation disabled may omit
    `--api-key-file`.
-3. Run `./pack-tools/build-pack.sh --output dist --expected-version 1.0.0`.
-   Drag `dist/smart2d-1.0.0.tar.gz` onto Management > Packs and install it.
+3. Run `./pack-tools/build-pack.sh --output dist --expected-version 1.1.0`.
+   Drag `dist/smart2d-1.1.0.tar.gz` onto Management > Packs and install it.
    The table appears in Settings > Application > External Tables as pack-owned.
    The DAG appears paused in Airflow within about five minutes.
 4. Configure the source Oracle Connection `oracle_db_oscar`, then check the
@@ -31,6 +32,45 @@ are never included in the pack or its GitHub release.
 Releases are built and attached to `v*` GitHub tags by
 `.github/workflows/release-pack.yml`; download the archive and its `.sha256`
 sidecar from the matching release.
+
+## Pack author scaffold
+
+The examples are namespaced to this pack and are safe to install. Jobs, the
+scheduled trigger, the hook, and the HTTP probe are disabled. Enable a job in
+the UI when you want to run it. The recording rule emits a constant zero;
+replace it with a customer query when ready. The configuration rule matches
+only the synthetic `smart2d_demo` namespace, and the suppression is scoped to
+the synthetic `smart2d_scaffold_only` component.
+
+| Artifact | Example | What it shows |
+| --- | --- | --- |
+| Job definitions | `jobs/smart2d.examples.yml` | Invoke, Fabric, Python script, and Ansible runner jobs |
+| Invoke task | `tasks/smart2d_demo.py` | Return a local task result |
+| Fabric task | `fabfile/smart2d_demo.py` | Return a local receipt; configure an authorized target before enabling its job |
+| Script | `scripts/smart2d_demo.py` | Print a message in a script worker |
+| Ansible | `ansible/playbooks/smart2d_demo.yml` | Read-only local playbook using `ansible/roles`, `ansible/library`, and `ansible/collections` |
+| Function catalog | `catalog/functions.yml` | Describe callable functions for the UI |
+| Configuration | `conf/rules`, `conf/mappings`, `conf/roles`, `conf/dashboards` | One namespaced rule, lookup, unassigned role, and dashboard |
+| Automation configuration | `conf/hooks`, `conf/suppressions`, `conf/probes` | One disabled hook, scoped maintenance window, and disabled probe |
+| Scheduled trigger | `conf/triggers/smart2d.demo.yml`, `triggers/smart2d_demo.py` | Disabled function trigger with a static result |
+| Recording rule | `rules/smart2d-demo.yml` | Prometheus rule group |
+| Notifier template | `templates/smart2d_demo.j2`, `.yml` | Logger template and metadata |
+| Airflow workflow | `workflow/dags/oracle_audit_dag.py`, `workflow/lib/ora_audit_alert.j2` | Customer DAG with pack-local support file |
+| External table | `tables/ext_oracle_audit_counts.sql` | Pack-managed database table |
+
+The `ansible/roles`, `ansible/library`, and `ansible/collections` directories
+are support code for the Ansible playbook. A `celery` job can reference an
+OSCAR core task, but a pack cannot define a new Celery task; use Invoke for
+pack-owned Python code. Credentials and Connections remain in OSCAR's
+Connections/Vault rather than in this archive.
+
+To test the local Ansible example before release:
+
+```bash
+ANSIBLE_ROLES_PATH=ansible/roles ANSIBLE_COLLECTIONS_PATH=ansible/collections \
+  ANSIBLE_LIBRARY=ansible/library ansible-playbook -i localhost, \
+  ansible/playbooks/smart2d_demo.yml
+```
 
 ## Cutover from the core DAG and table
 

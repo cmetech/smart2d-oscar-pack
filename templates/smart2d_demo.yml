@@ -1,0 +1,5 @@
+name: smart2d_demo
+channels: [logger]
+format: text
+description: Minimal logger notification template for pack authors.
+sample: Smart2D example

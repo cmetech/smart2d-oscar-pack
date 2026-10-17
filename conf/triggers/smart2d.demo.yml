@@ -1,0 +1,10 @@
+api_version: oscar/v1
+kind: Trigger
+name: smart2d.demo
+description: Disabled function trigger example; returns a static result.
+enabled: false
+schedule:
+  type: interval
+  seconds: 3600
+run:
+  function: pack:smart2d:smart2d_demo:run

@@ -1,0 +1,15 @@
+---
+- name: Smart2D local example
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+    - smart2d_demo
+    - smart2d.demo.hello
+  tasks:
+    - name: Return a local module receipt
+      smart2d_demo_receipt:
+      register: receipt
+    - name: Show pack example
+      ansible.builtin.debug:
+        msg: "{{ receipt.message }}"

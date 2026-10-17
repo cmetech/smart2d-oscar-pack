@@ -1,0 +1,7 @@
+namespace: smart2d
+name: demo
+version: 1.0.0
+readme: README.md
+authors: [Smart2D]
+description: Minimal collection layout for OSCAR pack authors.
+license: [MIT]

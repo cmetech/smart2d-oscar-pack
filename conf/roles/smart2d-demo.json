@@ -1,0 +1,7 @@
+[
+  {
+    "name": "smarttwo.demo_viewer",
+    "description": "Unassigned read-only example role",
+    "permissions": [{"action": "read", "subject": "packs"}]
+  }
+]
