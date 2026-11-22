@@ -641,7 +641,7 @@ def _scan_source(source_root: Path) -> tuple[bytes, tuple[_SourceFile, ...]]:
         relative = path.relative_to(root).as_posix()
         relative_path = Path(relative)
         if (
-            relative_path.parts[0] in {".git", ".github", ".pytest_cache", "pack-tools", "dist", "tests"}
+            relative_path.parts[0] in {".depot", ".git", ".github", ".pytest_cache", "pack-tools", "dist", "tests"}
             or relative
             in {".gitignore", ".gitlab-ci.yml", "README.md", "pack.source.yml"}
         ):
